@@ -23,6 +23,8 @@ impl Processor {
         let instruction = EscrowInstruction::unpack(instruction_data)?;
 
         match instruction {
+            //the instruction for Alice to initialize the escrow account
+            //and Bob to process the exchage?
             EscrowInstruction::InitEscrow { amount } => {
                 msg!("Instruction: InitEscrow");
                 Self::process_init_escrow(accounts, amount, program_id)
@@ -40,6 +42,7 @@ impl Processor {
         program_id: &Pubkey,
     ) -> ProgramResult {
         let account_info_iter = &mut accounts.iter();
+        //initializer is Alice
         let initializer = next_account_info(account_info_iter)?;
 
         if !initializer.is_signer {
@@ -103,6 +106,7 @@ impl Processor {
         program_id: &Pubkey,
     ) -> ProgramResult {
         let account_info_iter = &mut accounts.iter();
+        //taker is Bob
         let taker = next_account_info(account_info_iter)?;
 
         if !taker.is_signer {

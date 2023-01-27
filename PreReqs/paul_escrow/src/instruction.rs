@@ -3,6 +3,9 @@ use std::convert::TryInto;
 
 use crate::error::EscrowError::InvalidInstruction;
 
+///In general the EscrowInstruction only has two parts. Initialize the escrow and
+/// eschange the tokens, so party A can be both Alice or Bob, or any user that initialize
+/// the program
 pub enum EscrowInstruction {
     /// Starts the trade by creating and populating an escrow account and transferring ownership of the given temp token account to the PDA
     ///
