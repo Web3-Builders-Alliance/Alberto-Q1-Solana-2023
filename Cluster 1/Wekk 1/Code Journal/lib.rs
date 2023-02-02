@@ -92,7 +92,7 @@ fn process_instruction(
 What are the concepts (borrowing, ownership, vectors etc)
     solana_program is an instruction and inside there are vectors
 
-What is the organization?
+What is the organization?, How the code is organized?
 
 What is the contract doing? What is the mechanism?
     The program is processing the instructions provided by the entrypoint of what is connected
