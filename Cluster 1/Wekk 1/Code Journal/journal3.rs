@@ -3,6 +3,7 @@ use solana_program::{
     account_info::{
         next_account_info, AccountInfo
     },
+    //why there is two entrypoint?
     entrypoint,
     entrypoint::ProgramResult,
     msg,
@@ -14,11 +15,13 @@ use solana_program::{
     sysvar::Sysvar,
 };
 
-
+//this is attributes
+//cfg stands for config
 #[cfg(not(feature = "no-entrypoint"))]
 entrypoint!(process_instruction);
 
 
+///three fn and all three use the ProgramResult
 pub fn process_instruction(
     program_id: &Pubkey,
     accounts: &[AccountInfo],
@@ -38,8 +41,6 @@ pub fn process_instruction(
     Err(ProgramError::InvalidInstructionData)
 }
 
-
-
 pub fn initialize(
     program_id: &Pubkey,
     accounts: &[AccountInfo],
@@ -54,6 +55,7 @@ pub fn initialize(
     let account_span = (power_status.try_to_vec()?).len();
     let lamports_required = (Rent::get()?).minimum_balance(account_span);
 
+    //invoke allows your program to call ix of other program
     invoke(
         &system_instruction::create_account(
             &user.key,
@@ -104,3 +106,10 @@ pub struct SetPowerStatus {
 pub struct PowerStatus {
     pub is_on: bool,
 }
+
+/*
+What are the concepts (borrowing, ownership, vectors etc)
+What is the organization?
+What is the contract doing? What is the mechanism?
+How could it be better? More efficient? Safer?
+ */

@@ -61,3 +61,12 @@ add the variables after Err
         let time_out: u64 = unlock_time + 1000;
 
     - error.rs -
+
+-coding challenge 2-
+use AccountMeta and build public fn to call our ix
+    How do you build new pub functions?
+    instruction, state, processor
+
+Add 2 new ixs Cancel and ReseTimeLock
+    you are adding the ixs in the instruction.rs file
+    pub enum EscrowInstruction

@@ -1,3 +1,4 @@
+//new modules. similar to when calling clock
 use borsh::BorshDeserialize;
 use lever::SetPowerStatus;
 use solana_program::{
@@ -21,6 +22,8 @@ fn pull_lever(
     instruction_data: &[u8],
 ) -> ProgramResult {
 
+    ///these variables might be found in another folder the same order
+    /// accounts_iter, power, lever_program, set_power_status_instruction, ix
     let accounts_iter = &mut accounts.iter();
     let power = next_account_info(accounts_iter)?;
     let lever_program = next_account_info(accounts_iter)?;
@@ -35,3 +38,8 @@ fn pull_lever(
 
     invoke(&ix, &[power.clone()])
 }
+/*
+What are the concepts (borrowing, ownership, vectors etc)
+What is the organization?
+What is the contract doing? What is the mechanism?
+How could it be better? More efficient? Safer?  */

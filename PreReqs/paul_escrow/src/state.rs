@@ -15,6 +15,8 @@ pub struct Escrow {
     //adding two new field to be use in processor - they must follow order
     pub unlock_time: u64,
     pub time_out: u64,
+    //adding new public functions for challenge 2
+
 }
 
 impl Sealed for Escrow {}

@@ -3,6 +3,21 @@ use std::convert::TryInto;
 
 use crate::error::EscrowError::InvalidInstruction;
 
+pub fn init_escrow(
+    initiator: &Pubkey,
+    init_token_account: &Pubkey,
+    token_account2: &Pubkey,
+    rent: &Rent,
+    token_program: &Pubkey,
+) -> Result<Instruction, ProgramError> {
+    let init_data: EscrowInstruction = EscrowInstruction::InitEscrow
+}
+
+pub fn exchange(
+
+)
+
+
 ///In general the EscrowInstruction only has two parts. Initialize the escrow and
 /// eschange the tokens, so party A can be both Alice or Bob, or any user that initialize
 /// the program
@@ -41,6 +56,12 @@ pub enum EscrowInstruction {
     Exchange {
         /// the amount the taker expects to be paid in the other token, as a u64 because that's the max possible supply of a token
         amount: u64,
+    },
+    ResetTimeLock {
+        //no value needed
+    },
+    Cancel {
+
     },
 }
 
