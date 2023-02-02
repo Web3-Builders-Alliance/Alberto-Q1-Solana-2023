@@ -7,10 +7,14 @@ use solana_program::{
     program_pack::{IsInitialized, Pack},
     pubkey::Pubkey,
     sysvar::{rent::Rent, Sysvar},
+    clock::Clock,
 };
 
 use spl_token::state::Account as TokenAccount;
 
+//crate is bringing in state.rs and inside there is a pub struct Escrow
+//  and inside pub struct Escrow there is a pub is_initialized: bool,
+//  which is used here down below
 use crate::{error::EscrowError, instruction::EscrowInstruction, state::Escrow};
 
 pub struct Processor;
@@ -68,11 +72,20 @@ impl Processor {
             return Err(ProgramError::AccountAlreadyInitialized);
         }
 
+
+        //variables are added before escrow_info to follow the correct order of state.rs
+        let clock = Clock::get()?.slot;
+        let unlock_time: u64 = clock + 100;
+        let time_out: u64 = unlock_time + 1000;
+
         escrow_info.is_initialized = true;
         escrow_info.initializer_pubkey = *initializer.key;
         escrow_info.temp_token_account_pubkey = *temp_token_account.key;
         escrow_info.initializer_token_to_receive_account_pubkey = *token_to_receive_account.key;
         escrow_info.expected_amount = amount;
+        //new variables added
+        escrow_info.unlock_time = unlock_time;
+        escrow_info.time_out = time_out;
 
         Escrow::pack(escrow_info, &mut escrow_account.try_borrow_mut_data()?)?;
         let (pda, _nonce) = Pubkey::find_program_address(&[b"escrow"], program_id);
@@ -86,6 +99,8 @@ impl Processor {
             initializer.key,
             &[&initializer.key],
         )?;
+
+
 
         msg!("Calling the token program to transfer token account ownership...");
         invoke(
@@ -144,6 +159,13 @@ impl Processor {
             != *initializers_token_to_receive_account.key
         {
             return Err(ProgramError::InvalidAccountData);
+        }
+
+        //adding if statement
+        let current_slot = Clock::get()?.slot;
+        if !(current_slot >= escrow_info.unlock_time && current_slot <= escrow_info.time_out) {
+            //need to create new Timelock Err in the error.rs
+            return Err(EscrowError::Timelock.into());
         }
 
         let token_program = next_account_info(account_info_iter)?;

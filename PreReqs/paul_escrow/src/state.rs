@@ -12,6 +12,9 @@ pub struct Escrow {
     pub temp_token_account_pubkey: Pubkey,
     pub initializer_token_to_receive_account_pubkey: Pubkey,
     pub expected_amount: u64,
+    //adding two new field to be use in processor - they must follow order
+    pub unlock_time: u64,
+    pub time_out: u64,
 }
 
 impl Sealed for Escrow {}
@@ -23,7 +26,9 @@ impl IsInitialized for Escrow {
 }
 
 impl Pack for Escrow {
-    const LEN: usize = 105;
+    //I think I have to add 8, 8 for each new element
+    const LEN: usize = 105 + 8 + 8;
+    //const LEN: usize = 105;
     fn unpack_from_slice(src: &[u8]) -> Result<Self, ProgramError> {
         let src = array_ref![src, 0, Escrow::LEN];
         let (
@@ -32,7 +37,10 @@ impl Pack for Escrow {
             temp_token_account_pubkey,
             initializer_token_to_receive_account_pubkey,
             expected_amount,
-        ) = array_refs![src, 1, 32, 32, 32, 8];
+            //adding elemenets
+            unlock_time,
+            time_out,
+        ) = array_refs![src, 1, 32, 32, 32, 8, 8, 8];
         let is_initialized = match is_initialized {
             [0] => false,
             [1] => true,
@@ -47,6 +55,9 @@ impl Pack for Escrow {
                 *initializer_token_to_receive_account_pubkey,
             ),
             expected_amount: u64::from_le_bytes(*expected_amount),
+            //keep adding the new fields - fields should me matching above variables
+            unlock_time: u64::from_le_bytes(*unlock_time),
+            time_out: u64::from_le_bytes(*time_out),
         })
     }
 
@@ -58,7 +69,11 @@ impl Pack for Escrow {
             temp_token_account_pubkey_dst,
             initializer_token_to_receive_account_pubkey_dst,
             expected_amount_dst,
-        ) = mut_array_refs![dst, 1, 32, 32, 32, 8];
+            //adding elements into the scope
+            unlock_time_dst,
+            time_out_dts,
+            //as well as updating byte count
+        ) = mut_array_refs![dst, 1, 32, 32, 32, 8, 8, 8];
 
         let Escrow {
             is_initialized,
@@ -66,6 +81,9 @@ impl Pack for Escrow {
             temp_token_account_pubkey,
             initializer_token_to_receive_account_pubkey,
             expected_amount,
+            //update elements
+            unlock_time,
+            time_out,
         } = self;
 
         is_initialized_dst[0] = *is_initialized as u8;
@@ -74,5 +92,8 @@ impl Pack for Escrow {
         initializer_token_to_receive_account_pubkey_dst
             .copy_from_slice(initializer_token_to_receive_account_pubkey.as_ref());
         *expected_amount_dst = expected_amount.to_le_bytes();
+        //update elements
+        *unlock_time_dst = unlock_time.to_le_bytes();
+        *time_out_dts = time_out.to_le_bytes();
     }
 }
