@@ -109,7 +109,15 @@ pub struct PowerStatus {
 
 /*
 What are the concepts (borrowing, ownership, vectors etc)
-What is the organization?
+    this ons is using use borsh::{ BorshDeserialize, BorshSerialize };
+What is the organization? How the code is organized?
+    starts by laying the instructions in process_instruction
+    then initializing said instructions, program_id and accounts still needed.
+
+
 What is the contract doing? What is the mechanism?
+    I think is a program that checks if the power status is on or off, but I don't see
+    the bool to return false if is_on, maybe that can be an improvement?
+
 How could it be better? More efficient? Safer?
  */

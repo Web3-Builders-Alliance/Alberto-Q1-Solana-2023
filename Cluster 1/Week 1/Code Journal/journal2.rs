@@ -41,6 +41,7 @@ fn pull_lever(
 /*
 What are the concepts (borrowing, ownership, vectors etc)
     Two new concepts are borsh and lever
+
 What is the organization? How the code is organized?
 What is the contract doing? What is the mechanism?
 How could it be better? More efficient? Safer?  */
