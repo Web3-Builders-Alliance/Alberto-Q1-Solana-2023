@@ -61,11 +61,3 @@ add the variables after Err
         let time_out: u64 = unlock_time + 1000;
 
     - error.rs -
-<!-- comment -->
-Adding comment to use git push on terminal -> commit and push from the extension
-    same msg, cant push refs to remote
-
-what if only hit commit?
-    all it does its changes de sync changes up 1
-git push origin master --force
-above typig, ask for username and token again
