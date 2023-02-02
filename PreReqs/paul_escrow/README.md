@@ -70,3 +70,6 @@ use AccountMeta and build public fn to call our ix
 Add 2 new ixs Cancel and ReseTimeLock
     you are adding the ixs in the instruction.rs file
     pub enum EscrowInstruction
+
+"add the instructions to the enum and the processor."
+this means

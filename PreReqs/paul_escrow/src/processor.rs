@@ -29,6 +29,8 @@ impl Processor {
         match instruction {
             //the instruction for Alice to initialize the escrow account
             //and Bob to process the exchage?
+            //InitEscrow and Exchange are located in instruction.rs
+            //any new instruction added in instruction.rs muts also be added here
             EscrowInstruction::InitEscrow { amount } => {
                 msg!("Instruction: InitEscrow");
                 Self::process_init_escrow(accounts, amount, program_id)
@@ -36,6 +38,16 @@ impl Processor {
             EscrowInstruction::Exchange { amount } => {
                 msg!("Instruction: Exchange");
                 Self::process_exchange(accounts, amount, program_id)
+            }
+            //adding ResetTimeLock and Cancel
+            //then you will need to create fn process_reset_time_lock
+            EscrowInstruction::ResetTimeLock { } => {
+                msg!("Instruction: Reset time");
+                Self::process_reset_time_lock()
+            }
+            EscrowInstruction::Cancel { } => {
+                msg!("Instruction: Cancel");
+                Self::process_cancel()
             }
         }
     }
@@ -237,6 +249,21 @@ impl Processor {
             .ok_or(EscrowError::AmountOverflow)?;
         **escrow_account.try_borrow_mut_lamports()? = 0;
         *escrow_account.try_borrow_mut_data()? = &mut [];
+
+        Ok(())
+    }
+
+    fn process_reset_time_lock(
+        //what is taking
+    ) -> ProgramResult {
+
+        Ok(())
+
+    }
+
+    fn process_cancel (
+        //what is taking
+    ) -> ProgramResult {
 
         Ok(())
     }

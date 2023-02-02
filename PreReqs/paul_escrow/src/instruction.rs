@@ -69,8 +69,7 @@ impl EscrowInstruction {
     /// Unpacks a byte buffer into a [EscrowInstruction](enum.EscrowInstruction.html).
     pub fn unpack(input: &[u8]) -> Result<Self, ProgramError> {
         let (tag, rest) = input.split_first().ok_or(InvalidInstruction)?;
-        //passing clock
-        //let clock = Clock::get()
+
 
         Ok(match tag {
             0 => Self::InitEscrow {
@@ -78,6 +77,13 @@ impl EscrowInstruction {
             },
             1 => Self::Exchange {
                 amount: Self::unpack_amount(rest)?,
+            },
+            //adding new ix
+            2 => Self::ResetTimeLock {
+                //the variable that goes above also goes here
+            },
+            3 => Self::Cancel {
+                //
             },
             _ => return Err(InvalidInstruction.into()),
         })
