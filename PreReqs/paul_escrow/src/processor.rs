@@ -43,11 +43,11 @@ impl Processor {
             //then you will need to create fn process_reset_time_lock
             EscrowInstruction::ResetTimeLock { } => {
                 msg!("Instruction: Reset time");
-                Self::process_reset_time_lock()
+                Self::process_reset_time_lock(accounts, program_id)
             }
             EscrowInstruction::Cancel { } => {
                 msg!("Instruction: Cancel");
-                Self::process_cancel()
+                Self::process_cancel(accounts, program_id)
             }
         }
     }
@@ -254,17 +254,20 @@ impl Processor {
     }
 
     fn process_reset_time_lock(
-        //what is taking
+        accounts: &[AccountInfo],
+        program_id: &Pubkey,
     ) -> ProgramResult {
 
         Ok(())
 
     }
 
-    fn process_cancel (
-        //what is taking
+    fn process_cancel(
+        accounts: &[AccountInfo],
+        program_id: &Pubkey,
     ) -> ProgramResult {
 
         Ok(())
     }
 }
+

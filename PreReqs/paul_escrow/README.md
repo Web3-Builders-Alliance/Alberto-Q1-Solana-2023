@@ -70,6 +70,10 @@ use AccountMeta and build public fn to call our ix
 Add 2 new ixs Cancel and ReseTimeLock
     you are adding the ixs in the instruction.rs file
     pub enum EscrowInstruction
+Cancel will return any sent SPL tokens to the initiator and then close the account
+so that the rent is also returned
+
+ResetTimeLock will reset the time_lock and time_out
 
 "add the instructions to the enum and the processor."
 this means

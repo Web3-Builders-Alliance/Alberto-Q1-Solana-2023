@@ -4,7 +4,9 @@ use std::convert::TryInto;
 use crate::error::EscrowError::InvalidInstruction;
 
 pub fn init_escrow(
+    program_id: &Pubkey,
     initiator: &Pubkey,
+    pda_token_acct: &Pubkey,
     init_token_account: &Pubkey,
     token_account2: &Pubkey,
     rent: &Rent,
