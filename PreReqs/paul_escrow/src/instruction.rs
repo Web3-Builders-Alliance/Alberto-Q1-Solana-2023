@@ -41,7 +41,7 @@ pub enum EscrowInstruction {
     //Reset Time lock and time_out
     /// 0. `[signer]` The initializer that is reseting the timelock
     /// 1. `[writable]` The escrow account holding the escrow info
-    ResetTimeLock {n},
+    ResetTimeLock {},
     //Cancel Escrow
     /// 0. `[signer]` The initializer that is canceling their escrow
     /// 1. `[writable]` The PDA's temp token account to get tokens from and eventually close
