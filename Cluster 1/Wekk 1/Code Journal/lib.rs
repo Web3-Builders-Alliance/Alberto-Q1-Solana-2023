@@ -93,6 +93,8 @@ What are the concepts (borrowing, ownership, vectors etc)
     solana_program is an instruction and inside there are vectors
 
 What is the organization?, How the code is organized?
+    the code is organized, first by declaring the elements necessary, and then after, the fn instruction
+    of what the program is going to do with that information.
 
 What is the contract doing? What is the mechanism?
     The program is processing the instructions provided by the entrypoint of what is connected
@@ -113,4 +115,7 @@ How could it be better? More efficient? Safer?
     and the the program code (like this one) is in processo.rs
 
 The code could be safer and better if…..
+    I think because the program is hardcoded in having four accounts, if one of them fail then the whole program
+    wiill fail as well, maybe rather if could be more useful if one account fails, the program will ask user
+    to check for that error
  */
