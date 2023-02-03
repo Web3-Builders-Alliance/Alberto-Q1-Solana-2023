@@ -66,6 +66,8 @@ add the variables after Err
 use AccountMeta and build public fn to call our ix
     How do you build new pub functions?
     instruction, state, processor
+    AccountMeta is in instrcutions
+
 
 Add 2 new ixs Cancel and ReseTimeLock
     you are adding the ixs in the instruction.rs file
