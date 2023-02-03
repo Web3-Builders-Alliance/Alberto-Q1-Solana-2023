@@ -135,6 +135,9 @@ pub fn init_escrow(
     })
 }
 
+///Building a pub fn that will contain a AccountMeta, but why is it called exchange and not
+/// cancel or time_lock, since those are the new ix
+///
     pub fn exchange(
         program_id: &Pubkey,
         taker: &Pubkey,

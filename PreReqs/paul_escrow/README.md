@@ -65,13 +65,14 @@ add the variables after Err
 -coding challenge 2-
 use AccountMeta and build public fn to call our ix
     How do you build new pub functions?
-    instruction, state, processor
+        - build new pub fn inside the init_escrow
     AccountMeta is in instrcutions
 
 
-Add 2 new ixs Cancel and ReseTimeLock
+Add 2 new ix Cancel and ReseTimeLock
     you are adding the ixs in the instruction.rs file
-    pub enum EscrowInstruction
+    inside pub enum EscrowInstruction
+
 Cancel will return any sent SPL tokens to the initiator and then close the account
 so that the rent is also returned
 
