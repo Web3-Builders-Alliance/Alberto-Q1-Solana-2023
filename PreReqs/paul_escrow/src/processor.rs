@@ -1,3 +1,5 @@
+use std::intrinsics::mir::Return;
+
 use solana_program::{
     account_info::{next_account_info, AccountInfo},
     entrypoint::ProgramResult,
@@ -259,11 +261,33 @@ impl Processor {
         accounts: &[AccountInfo],
         program_id: &Pubkey,
     ) -> ProgramResult {
+        let account_info_iter = &mut accounts.iter();
+        let initializer = next_account_info(account_info_iter)?;
+
+        if !initializer.is_signer {
+            return Err(ProgramError::MissingRequiredSignature);
+        }
+
+        let escrow_account = next_account_info(account_info_iter)?;
+        if escrow_account.owner != program_id || escrow_account.is_writable == false {
+            return Err(ProgramError::IllegalOwner);
+        }
+        //unpacking will allow to check the escrow
+        let mut escrow_info = Escrow::unpack(&escrow_account.try_borrow_data()?)?;
+
+        if escrow_info.initializer_pubkey != *initializer.key {
+            return Err(ProgramError::InvalidAccountData);
+        }
+
+        //reset the values
+        escrow_info.unlock_time = 0;
+        escrow_info.time_out = 0;
 
         Ok(())
 
     }
-
+///most of the times you would want program_id , just ti make sure as the
+/// functions run, you are talking to the right program.
     fn process_cancel(
         accounts: &[AccountInfo],
         program_id: &Pubkey,
@@ -271,7 +295,7 @@ impl Processor {
         let account_info_iter = &mut accounts.iter();
         let initializer = next_account_info(account_info_iter)?;
 
-        if !initializer.is_signer {
+        if !initializer.is_signer { //check to see if initializer is a signer
             return Err(ProgramError::MissingRequiredSignature);
         }
 

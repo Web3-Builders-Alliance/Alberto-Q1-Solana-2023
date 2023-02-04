@@ -72,6 +72,8 @@ use AccountMeta and build public fn to call our ix
 Add 2 new ix Cancel and ReseTimeLock
     you are adding the ixs in the instruction.rs file
     inside pub enum EscrowInstruction
+    Neither of these ix will take any data
+    STL will
 
 Cancel will return any sent SPL tokens to the initiator and then close the account
 so that the rent is also returned
