@@ -43,5 +43,9 @@ What are the concepts (borrowing, ownership, vectors etc)
     Two new concepts are borsh and lever
 
 What is the organization? How the code is organized?
+    The code is organized as one single function called pull lever,
+    I can think this is just to check if the lever is true or false
+    but I don't see the boolean to turn it opposite as it currently is
 What is the contract doing? What is the mechanism?
+
 How could it be better? More efficient? Safer?  */
