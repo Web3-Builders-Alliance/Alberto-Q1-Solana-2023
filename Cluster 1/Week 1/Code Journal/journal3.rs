@@ -120,4 +120,8 @@ What is the contract doing? What is the mechanism?
     the bool to return false if is_on, maybe that can be an improvement?
 
 How could it be better? More efficient? Safer?
+    I'm not sure how it could be safer, maybe make it better by
+    adding  power_status: PowerStatus into the switch_power function,
+    now that I think about it, switch_power function uses PowerStatus::try_from_slice
+    which is not in scope, I wonder if that could cause error
  */
