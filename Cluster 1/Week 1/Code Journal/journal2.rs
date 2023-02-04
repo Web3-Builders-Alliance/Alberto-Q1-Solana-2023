@@ -47,5 +47,9 @@ What is the organization? How the code is organized?
     I can think this is just to check if the lever is true or false
     but I don't see the boolean to turn it opposite as it currently is
 What is the contract doing? What is the mechanism?
+    checking if a lever is true or false, althoug I don't see the
+    ix that will turn the boolean true or false
 
-How could it be better? More efficient? Safer?  */
+How could it be better? More efficient? Safer?
+    better I guess adding a second ix so the program can change the lever
+*/
