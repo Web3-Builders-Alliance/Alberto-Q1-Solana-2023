@@ -29,7 +29,7 @@ Wekk 2 Anchor
 
 In the Anchor.toml file is where you set up various flags to manage workspace
 
-2/7 recording
+Tuesday 2/7 recording
 at 43:00 mentions you don't want to use AccountInfo unless you necessary have to,
 in the rs code there are some parts where AccountInfo is present
 
@@ -43,3 +43,4 @@ then run `anchor test` to build
 
 - Add cancel and use the close constraint sending the spl tokens back to the initializer
 
+I think you can change AccountInfo to UncheckedAccount still will need a ///CHECK

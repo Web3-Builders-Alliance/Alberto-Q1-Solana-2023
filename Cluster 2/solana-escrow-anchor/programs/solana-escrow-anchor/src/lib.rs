@@ -11,8 +11,9 @@ pub mod solana_escrow_anchor {
 
     const ESCROW_PDA_SEED: &[u8] = b"escrow";
 
-    pub fn initialize(ctx: Context<Initialize>, amount: u64) -> ProgramResult {
+    pub fn initialize(ctx: Context<Initialize>, amount: u64) -> Result<()> {
         // Store data in escrow account
+        //escrow_account adds will also have to be update in pub struct Escrow
         let escrow_account = &mut ctx.accounts.escrow_account;
         escrow_account.is_initialized = true;
         escrow_account.initializer_pubkey = *ctx.accounts.initializer.to_account_info().key;
@@ -21,8 +22,7 @@ pub mod solana_escrow_anchor {
         escrow_account.expected_amount = amount;
 
         //adding time_lock and unlock time
-        //
-        escrow_account.unlock_time = Clock::get()?.slot.checked_add
+        escrow_account.unlock_time = Clock::get()?.slot.checked_add(100).unwrap();
 
         // Create PDA, which will own the temp token account
         let (pda, _bump_seed) = Pubkey::find_program_address(&[ESCROW_PDA_SEED], ctx.program_id);
@@ -31,7 +31,7 @@ pub mod solana_escrow_anchor {
         Ok(())
     }
 
-    pub fn exchange(ctx: Context<Exchange>, amount_expected_by_taker: u64) -> ProgramResult {
+    pub fn exchange(ctx: Context<Exchange>, amount_expected_by_taker: u64) -> Result<()> {
         let escrow_account = &ctx.accounts.escrow_account;
 
         // Ensure that expected and deposited amount match
@@ -76,8 +76,11 @@ pub struct Initialize<'info> {
     )]
     pub escrow_account: Account<'info, Escrow>,
     #[account(address = spl_token::id())]
+    ///CHECK
     pub token_program: AccountInfo<'info>,
     #[account(address = system_program::ID)]
+    //something else here
+    ///CHECK
     pub system_program: AccountInfo<'info>, // needed for init escrow_init
 }
 
@@ -92,7 +95,7 @@ pub struct Exchange<'info> {
     #[account(mut)]
     pub pdas_temp_token_account: Account<'info, TokenAccount>,
     #[account(mut)]
-    pub initializers_main_account: AccountInfo<'info>,
+    pub initializers_main_account: AccountInfo<'info>, //All the AccountInfo needs a CHECK
     #[account(mut)]
     pub initializers_token_to_receive_account: Account<'info, TokenAccount>,
     #[account(mut, close = initializers_main_account,
@@ -100,12 +103,15 @@ pub struct Exchange<'info> {
         constraint = escrow_account.initializer_pubkey == *initializers_main_account.to_account_info().key @ ProgramError::InvalidAccountData,
         constraint = escrow_account.initializer_token_to_receive_account_pubkey == *initializers_token_to_receive_account.to_account_info().key @ ProgramError::InvalidAccountData,
     )]
+
     pub escrow_account: Box<Account<'info, Escrow>>,
+    //You can use something else here instead of AccountInfo
     #[account(address = spl_token::id())]
     pub token_program: AccountInfo<'info>,
     pub pda_account: AccountInfo<'info>,
 }
 
+// This is what state.rs would look like in native solana
 #[account]
 pub struct Escrow {
     pub is_initialized: bool,
@@ -113,8 +119,10 @@ pub struct Escrow {
     pub temp_token_account_pubkey: Pubkey,
     pub initializer_token_to_receive_account_pubkey: Pubkey,
     pub expected_amount: u64,
+    pub unlock_time: u64,
 }
 
+// You still have to calculate the size
 const DISCRIMINATOR_LENGTH: usize = 8;
 const BOOL_LENGTH: usize = 1;
 const PUBLIC_KEY_LENGTH: usize = 32;
@@ -138,11 +146,13 @@ impl<'info> From<&mut Initialize<'info>> for CpiContext<'_, '_, '_, 'info, SetAu
     }
 }
 
-#[error]
+//update error to error_code
+#[error_code]
 pub enum ErrorCode {
     #[msg("Amount expected by taker does not match the deposited amount of intitializer.")]
     ExpectedAmountMismatch,
 }
+
 
 impl<'info> Exchange<'info> {
     fn into_transfer_to_initializer_context(&self) -> CpiContext<'_, '_, '_, 'info, Transfer<'info>> {
