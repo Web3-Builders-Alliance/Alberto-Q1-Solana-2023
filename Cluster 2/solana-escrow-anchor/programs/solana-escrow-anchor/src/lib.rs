@@ -20,6 +20,10 @@ pub mod solana_escrow_anchor {
         escrow_account.initializer_token_to_receive_account_pubkey = *ctx.accounts.token_to_receive_account.to_account_info().key;
         escrow_account.expected_amount = amount;
 
+        //adding time_lock and unlock time
+        //
+        escrow_account.unlock_time = Clock::get()?.slot.checked_add
+
         // Create PDA, which will own the temp token account
         let (pda, _bump_seed) = Pubkey::find_program_address(&[ESCROW_PDA_SEED], ctx.program_id);
         token::set_authority(ctx.accounts.into(), AuthorityType::AccountOwner, Some(pda))?;
@@ -55,7 +59,7 @@ pub mod solana_escrow_anchor {
         Ok(())
     }
 }
-
+// add the time_lock and unlock_time
 #[derive(Accounts)]
 pub struct Initialize<'info> {
     #[account(mut)]
