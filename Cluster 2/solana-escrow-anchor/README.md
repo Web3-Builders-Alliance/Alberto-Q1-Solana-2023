@@ -44,3 +44,9 @@ then run `anchor test` to build
 - Add cancel and use the close constraint sending the spl tokens back to the initializer
 
 I think you can change AccountInfo to UncheckedAccount still will need a ///CHECK
+
+Wednesday 2/8 recording
+- Continue with Account Types for the escrow solana
+
+3:30 - Talking about UnchekedAccount apparently is a wrapper around AccountInfo, it is more verbose.
+5:05 - Basically you shouldn't use it, but is talking about UncheckedType

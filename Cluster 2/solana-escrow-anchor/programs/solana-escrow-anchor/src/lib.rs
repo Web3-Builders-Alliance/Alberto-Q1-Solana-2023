@@ -3,7 +3,7 @@ use anchor_lang::solana_program::system_program;
 use anchor_spl::token::{self, CloseAccount, SetAuthority, TokenAccount, Transfer};
 
 declare_id!("ECh7FQHy1hDxkiYjPVi8tYhmZ2oHE1zJqsyxbP4vS3nd");
-
+//business logic goes in here
 #[program]
 pub mod solana_escrow_anchor {
     use spl_token::instruction::AuthorityType;
@@ -11,6 +11,7 @@ pub mod solana_escrow_anchor {
 
     const ESCROW_PDA_SEED: &[u8] = b"escrow";
 
+    //so far there are two fn initialize and exchange,
     pub fn initialize(ctx: Context<Initialize>, amount: u64) -> Result<()> {
         // Store data in escrow account
         //escrow_account adds will also have to be update in pub struct Escrow
@@ -21,8 +22,18 @@ pub mod solana_escrow_anchor {
         escrow_account.initializer_token_to_receive_account_pubkey = *ctx.accounts.token_to_receive_account.to_account_info().key;
         escrow_account.expected_amount = amount;
 
-        //adding time_lock and unlock time
+        //adding time_lock and unlock time.
+        //these two new features are to continue working with escrow_account and not necesarrily a new fn
+        //I see different ways on how to do this
+        //One
         escrow_account.unlock_time = Clock::get()?.slot.checked_add(100).unwrap();
+
+        //Two
+        let _slot = Clock::get()?.slot + 100;
+        // Set timeout to 1000 slots
+        let timeout_time: u64 = 1000;
+        escrow_account.unlock_time = _slot;
+        escrow_account.timeout_time = timeout_time;
 
         // Create PDA, which will own the temp token account
         let (pda, _bump_seed) = Pubkey::find_program_address(&[ESCROW_PDA_SEED], ctx.program_id);
@@ -38,6 +49,8 @@ pub mod solana_escrow_anchor {
         if amount_expected_by_taker != ctx.accounts.pdas_temp_token_account.amount {
             return Err(ErrorCode::ExpectedAmountMismatch.into());
         }
+
+
 
         // Get PDA
         let (_pda, bump_seed) = Pubkey::find_program_address(&[ESCROW_PDA_SEED], ctx.program_id);
@@ -59,7 +72,7 @@ pub mod solana_escrow_anchor {
         Ok(())
     }
 }
-// add the time_lock and unlock_time
+// validate incoming accounts here
 #[derive(Accounts)]
 pub struct Initialize<'info> {
     #[account(mut)]
@@ -95,7 +108,8 @@ pub struct Exchange<'info> {
     #[account(mut)]
     pub pdas_temp_token_account: Account<'info, TokenAccount>,
     #[account(mut)]
-    pub initializers_main_account: AccountInfo<'info>, //All the AccountInfo needs a CHECK
+    ///CHECK
+    pub initializers_main_account: AccountInfo<'info>, //All the AccountInfo or UncheckedA needs a CHECK
     #[account(mut)]
     pub initializers_token_to_receive_account: Account<'info, TokenAccount>,
     #[account(mut, close = initializers_main_account,
@@ -107,7 +121,9 @@ pub struct Exchange<'info> {
     pub escrow_account: Box<Account<'info, Escrow>>,
     //You can use something else here instead of AccountInfo
     #[account(address = spl_token::id())]
+    ///CHECK
     pub token_program: AccountInfo<'info>,
+    ///CHECK
     pub pda_account: AccountInfo<'info>,
 }
 
@@ -120,6 +136,7 @@ pub struct Escrow {
     pub initializer_token_to_receive_account_pubkey: Pubkey,
     pub expected_amount: u64,
     pub unlock_time: u64,
+    pub timeout_time: u64,
 }
 
 // You still have to calculate the size

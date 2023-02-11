@@ -12,4 +12,14 @@ pub mod deposit {
 }
 
 #[derive(Accounts)]
-pub struct Initialize {}
+pub struct Initialize {
+
+}
+
+//add the state
+//You dont have to make it public, the only thing should be accessing this state is this
+//module, you do want your module to be public
+#[account]
+struct State {
+
+}
