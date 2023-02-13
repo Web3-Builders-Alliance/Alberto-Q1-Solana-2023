@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_program;
 use anchor_spl::token::{self, CloseAccount, SetAuthority, TokenAccount, Transfer};
 
-declare_id!("ECh7FQHy1hDxkiYjPVi8tYhmZ2oHE1zJqsyxbP4vS3nd");
+declare_id!("3aaLZLTyVHEJDqnySpxJjAffUsJuDm95U2BHiRPYoVTc");
 //business logic goes in here
 #[program]
 pub mod solana_escrow_anchor {
@@ -24,6 +24,7 @@ pub mod solana_escrow_anchor {
 
         //adding time_lock and unlock time.
         //these two new features are to continue working with escrow_account and not necesarrily a new fn
+        msg!("unlock time and time out about to be initialized");
         //I see different ways on how to do this
         //One
         escrow_account.unlock_time = Clock::get()?.slot.checked_add(100).unwrap();
@@ -149,7 +150,7 @@ impl Escrow {
     const LEN: usize = DISCRIMINATOR_LENGTH +
         BOOL_LENGTH +
         PUBLIC_KEY_LENGTH * 3 +
-        U64_LENGTH;
+        U64_LENGTH * 3; //n for every u64 above
 }
 
 impl<'info> From<&mut Initialize<'info>> for CpiContext<'_, '_, '_, 'info, SetAuthority<'info>> {
