@@ -17,3 +17,6 @@ default = []
 
 [dependencies]
 anchor-lang = "0.26.0"
+# anchor-lang     = { "0.26.0", workspace = true, features = ["init-if-needed"]}
+# anchor_spl      = {workspace = true, features = ["token", "metadata"]}
+# solana-program  = {workspace = true}
