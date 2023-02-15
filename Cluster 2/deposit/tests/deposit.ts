@@ -120,6 +120,14 @@ describe("deposit", () => {
       TOKEN_PROGRAM_ID
     );
 
+    let res  = await metaplex.nfts().create({
+      name:"Placeholder 0123",
+      symbol:"PLC",
+      uri:"arweav.uri",
+      sellerFeeBasisPoints:100,
+      useExistingMint: token_mint,
+    });
+
     let test = await getMint(provider.connection, mint.publicKey, null, TOKEN_PROGRAM_ID);
     console.log(test);
 

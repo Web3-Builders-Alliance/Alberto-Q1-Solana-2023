@@ -42,3 +42,10 @@ The video start byb talking about the Associated Token Account
 
 Coding Challenge 2/14
 -
+
+#Wednesday 2/15 class 8
+https://docs.metaplex.com/
+https://github.com/metaplex-foundation/js
+https://github.com/metaplex-foundation/js#update
+https://github.com/metaplex-foundation/js#the-nft-model
+
